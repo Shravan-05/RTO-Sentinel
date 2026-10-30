@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-10-30T19:38:00Z",
+  "dataset_source": "orders_sample.csv",
+  "raw_dataset_statistics": {
+    "total_records": 2018,
+    "unique_order_ids": 1988,
+    "duplicate_order_ids": 30,
+    "exact_duplicates": 30,
+    "raw_status_distribution": {
+      "DELIVERED": 1444,
+      "RTO": 573,
+      "IN_TRANSIT": 1
+    },
+    "raw_status_formatting_issues": "Contains casing/whitespace variants ('delivered', 'Rto', 'RTO ') normalized via str.strip().str.upper().",
+    "missing_values": {
+      "city": 4,
+      "pincode": 12
+    },
+    "payment_method_distribution": {
+      "COD": 1987
+    }
+  },
+  "data_cleaning_and_deduplication": {
+    "policy": "Deterministic First-Occurrence Deduplication (keep='first')",
+    "reconciliation_rationale": "All 30 duplicate order IDs were verified to be 100% exact row replicas (identical timestamps, customer details, addresses, and order outcomes). None represented conflicting states. Dropping the 30 duplicates produces 1,988 distinct customer transactions.",
+    "post_dedup_records": 1988,
+    "post_dedup_status": {
+      "DELIVERED": 1422,
+      "RTO": 565,
+      "IN_TRANSIT": 1
+    }
+  },
+  "in_transit_exclusion_policy": {
+    "policy": "Excluded from Supervised Machine Learning",
+    "rationale": "Single unresolved order (IN_TRANSIT) does not have a definitive terminal outcome (DELIVERED or RTO). Including censored/indeterminate states introduces label noise during binary classification training.",
+    "clean_training_eligible_records": 1987,
+    "final_delivered": 1422,
+    "final_rto": 565,
+    "final_rto_rate_percentage": 28.43
+  },
+  "customer_segment_analysis": {
+    "first_time_buyers": {
+      "count_raw": 1518,
+      "percentage_raw": 75.22,
+      "count_clean": 1495,
+      "percentage_clean": 75.24,
+      "rto_count": 452,
+      "rto_rate_percentage": 30.23
+    },
+    "repeat_buyers": {
+      "count_clean": 492,
+      "rto_count": 113,
+      "rto_rate_percentage": 22.97
+    }
+  },
+  "chronological_split": {
+    "strategy": "Strict Temporal Holdout (April-July 2026 Train, August-September 2026 Test)",
+    "rationale": "Avoids future-data leakage; simulates real-world production deployment where the model trained on historical data predicts future incoming orders.",
+    "training_set": {
+      "period": "2026-04-01 to 2026-07-31",
+      "total_orders": 1297,
+      "delivered": 919,
+      "rto": 378,
+      "rto_rate_percentage": 29.14
+    },
+    "test_set": {
+      "period": "2026-08-01 to 2026-09-30",
+      "total_orders": 690,
+      "delivered": 503,
+      "rto": 187,
+      "rto_rate_percentage": 27.1
+    }
+  }
+}

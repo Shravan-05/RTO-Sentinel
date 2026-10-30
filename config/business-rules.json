@@ -1,0 +1,36 @@
+{
+  "financialDefaults": {
+    "averageOrderValue": 649,
+    "grossMarginPercent": 62,
+    "forwardShippingCost": 65,
+    "returnShippingCost": 65,
+    "packagingHandlingCost": 25,
+    "damageProbability": 0.08,
+    "averageProductCost": 180,
+    "customerAcquisitionCost": 300,
+    "codRtoBaselineRate": 0.28,
+    "prepaidRtoBaselineRate": 0.04,
+    "prepaidAssumptions": {
+      "prepaidRtoRate": 0.04,
+      "prepaidConversionRate": 0.25,
+      "prepaidDiscount": 20,
+      "whatsAppCostPerMsg": 0.50,
+      "isEmpiricalAssumption": false,
+      "comment": "Prepaid 4% RTO rate is an unverified industry assumption pending A/B testing"
+    }
+  },
+  "customerProtection": {
+    "protectFirstTimeCustomers": true,
+    "preventAutomaticCancellationOnFirstTime": true,
+    "allowPincodeOnlyCancellation": false,
+    "repeatRtoHoldThreshold": 2
+  },
+  "whatsAppSimulation": {
+    "enableVirtualClock": true,
+    "autoAdvanceHours": 24,
+    "defaultTemplateLanguage": "en",
+    "prepaidNudgeMessageTemplate": "Hello {customerName}! Complete your payment now via UPI to get an instant ₹{discountAmount} discount! Pay securely: {paymentLink}",
+    "orderConfirmationMessageTemplate": "Hi {customerName}, thank you for choosing us! Please confirm your COD order #{orderId} of ₹{orderValue} by replying YES to confirm or NO to cancel."
+  }
+}
+

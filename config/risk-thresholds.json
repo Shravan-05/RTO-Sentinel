@@ -1,0 +1,33 @@
+{
+  "thresholds": {
+    "lowMax": 29,
+    "mediumMax": 54,
+    "highMax": 74,
+    "criticalMin": 75,
+    "shipAsIsMax": 29,
+    "shipAfterConfirmationMax": 54,
+    "nudgeToPrepaidMax": 74,
+    "holdCancelMin": 75,
+    "low_max": 29,
+    "medium_max": 54,
+    "high_max": 74
+  },
+  "policies": {
+    "lowAction": "SHIP_AS_IS",
+    "mediumAction": "SHIP_AFTER_CONFIRMATION",
+    "highAction": "NUDGE_TO_PREPAID",
+    "criticalAction": "HOLD_CANCEL"
+  },
+  "prepaidIncentive": {
+    "defaultDiscountAmount": 20,
+    "maxDiscountAmount": 50,
+    "minOrderValueForDiscount": 300
+  },
+  "timeouts": {
+    "confirmationTimeoutHours": 24,
+    "timeoutAction": "HOLD_CANCEL"
+  },
+  "protectFirstTimeBuyers": true,
+  "updatedAt": "2026-10-30T20:00:00.000Z",
+  "version": "1.1.0"
+}

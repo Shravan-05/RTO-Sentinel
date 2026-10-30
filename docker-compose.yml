@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  # ──────────────────────────────────────────
+  # MongoDB Database
+  # ──────────────────────────────────────────
+  mongo:
+    image: mongo:7.0
+    container_name: rto_sentinel_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────
+  # Python AI/ML Engine (FastAPI)
+  # ──────────────────────────────────────────
+  ai-engine:
+    build:
+      context: ./fastapi
+      dockerfile: Dockerfile
+    container_name: rto_sentinel_ai_engine
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi/artifacts:/app/artifacts
+      - ./fastapi/data:/app/data
+      - ./config:/app/config
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    depends_on: []
+    restart: unless-stopped
+
+  # ──────────────────────────────────────────
+  # Node.js Express API Backend
+  # ──────────────────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rto_sentinel_api
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - MONGODB_URI=mongodb://mongo:27017/rto_sentinel
+      - AI_ENGINE_URL=http://ai-engine:8000/api/v1
+      - JWT_SECRET=${JWT_SECRET:-rto-sentinel-docker-secret}
+      - JWT_EXPIRES_IN=7d
+    depends_on:
+      mongo:
+        condition: service_healthy
+      ai-engine:
+        condition: service_started
+    restart: unless-stopped
+
+  # ──────────────────────────────────────────
+  # React Frontend (Vite prod build served by Nginx)
+  # ──────────────────────────────────────────
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rto_sentinel_web
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+

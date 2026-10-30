@@ -1,0 +1,16 @@
+{
+  "name": "rto-sentinel",
+  "version": "1.0.0",
+  "description": "RTO Sentinel - AI-Powered COD Risk Management & RTO Prevention Platform",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@rto-sentinel/api",
+    "dev:web": "npm run dev --workspace=@rto-sentinel/web",
+    "test:api": "npm run test --workspace=@rto-sentinel/api"
+  }
+}
+

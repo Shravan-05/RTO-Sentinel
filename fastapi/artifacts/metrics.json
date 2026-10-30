@@ -1,0 +1,262 @@
+{
+  "model_version": "1.1.0",
+  "training_date": "2026-10-30",
+  "dataset": {
+    "total_samples": 1987,
+    "train_count": 1297,
+    "test_count": 690,
+    "rto_samples": 565,
+    "delivered_samples": 1422,
+    "base_rto_rate": 0.2843
+  },
+  "target_encoding": {
+    "method": "CHRONOLOGICAL_EXPANDING_WINDOW",
+    "temporal_leakage_status": "PREVENTED (Each train order encodes strictly from past orders; holdout uses training lookup)",
+    "smoothing_m": 10.0,
+    "global_prior": 0.2914
+  },
+  "champion_model": "Logistic Regression (L2)",
+  "selection_rationale": "Logistic Regression (L2) selected as champion: highest operational recall (59.89%) and F1-Score (0.5068) on the chronological holdout dataset (Aug-Sep 2026). Intercepts 112-115 out of 187 holdout RTOs. Gradient Boosting achieved higher PR-AUC but intercepted under 40% of RTOs.",
+  "calibration_assessment": {
+    "status": "CALIBRATED_PLATT_SCALING_5FOLD_CV",
+    "method": "sigmoid (Platt scaling)",
+    "validation_scheme": "5-Fold Cross-Validation on Training Set ONLY (zero holdout contamination)",
+    "raw_model_brier_score": 0.2078,
+    "calibrated_brier_score": 0.1719,
+    "brier_improvement": 0.0359,
+    "raw_model_log_loss": 0.6052,
+    "calibrated_log_loss": 0.5189,
+    "raw_mean_predicted_probability": 0.447,
+    "calibrated_mean_predicted_probability": 0.2858,
+    "actual_test_base_rate": 0.271,
+    "reliability_quantile_bins": [
+      {
+        "bin": 1,
+        "raw_predicted": 0.0753,
+        "raw_true": 0.0942,
+        "calibrated_predicted": 0.1043,
+        "calibrated_true": 0.0725
+      },
+      {
+        "bin": 2,
+        "raw_predicted": 0.1499,
+        "raw_true": 0.1884,
+        "calibrated_predicted": 0.1868,
+        "calibrated_true": 0.1884
+      },
+      {
+        "bin": 3,
+        "raw_predicted": 0.2223,
+        "raw_true": 0.2086,
+        "calibrated_predicted": 0.2495,
+        "calibrated_true": 0.2319
+      },
+      {
+        "bin": 4,
+        "raw_predicted": 0.3569,
+        "raw_true": 0.3504,
+        "calibrated_predicted": 0.3458,
+        "calibrated_true": 0.3261
+      },
+      {
+        "bin": 5,
+        "raw_predicted": 0.6197,
+        "raw_true": 0.5145,
+        "calibrated_predicted": 0.5426,
+        "calibrated_true": 0.5362
+      }
+    ],
+    "explanation": "Platt scaling successfully corrects the systematic probability over-estimation caused by class_weight='balanced'. Mean predicted probability aligns closely with the actual holdout base rate."
+  },
+  "chronological_test_performance": {
+    "accuracy": 0.6841,
+    "precision": 0.4392,
+    "recall": 0.5989,
+    "f1_score": 0.5068,
+    "roc_auc": 0.7246,
+    "pr_auc": 0.5023,
+    "brier_score": 0.2078,
+    "log_loss": 0.6052,
+    "confusion_matrix": [
+      [
+        360,
+        143
+      ],
+      [
+        75,
+        112
+      ]
+    ],
+    "mean_predicted_prob": 0.447
+  },
+  "all_benchmarks": {
+    "Logistic Regression (L2)": {
+      "accuracy": 0.6841,
+      "precision": 0.4392,
+      "recall": 0.5989,
+      "f1_score": 0.5068,
+      "roc_auc": 0.7246,
+      "pr_auc": 0.5023,
+      "brier_score": 0.2078,
+      "log_loss": 0.6052,
+      "confusion_matrix": [
+        [
+          360,
+          143
+        ],
+        [
+          75,
+          112
+        ]
+      ],
+      "mean_predicted_prob": 0.447
+    },
+    "Random Forest": {
+      "accuracy": 0.7333,
+      "precision": 0.5083,
+      "recall": 0.492,
+      "f1_score": 0.5,
+      "roc_auc": 0.7229,
+      "pr_auc": 0.5149,
+      "brier_score": 0.193,
+      "log_loss": 0.572,
+      "confusion_matrix": [
+        [
+          414,
+          89
+        ],
+        [
+          95,
+          92
+        ]
+      ],
+      "mean_predicted_prob": 0.4176
+    },
+    "Gradient Boosting (GBDT)": {
+      "accuracy": 0.7478,
+      "precision": 0.5496,
+      "recall": 0.385,
+      "f1_score": 0.4528,
+      "roc_auc": 0.726,
+      "pr_auc": 0.5072,
+      "brier_score": 0.1759,
+      "log_loss": 0.5278,
+      "confusion_matrix": [
+        [
+          444,
+          59
+        ],
+        [
+          115,
+          72
+        ]
+      ],
+      "mean_predicted_prob": 0.2863
+    },
+    "HistGradientBoosting": {
+      "accuracy": 0.7348,
+      "precision": 0.5175,
+      "recall": 0.3155,
+      "f1_score": 0.392,
+      "roc_auc": 0.7206,
+      "pr_auc": 0.5224,
+      "brier_score": 0.174,
+      "log_loss": 0.5233,
+      "confusion_matrix": [
+        [
+          448,
+          55
+        ],
+        [
+          128,
+          59
+        ]
+      ],
+      "mean_predicted_prob": 0.2846
+    }
+  },
+  "top_features": {
+    "pin_rto_risk": 0.85022,
+    "is_first_time": 0.67025,
+    "is_high_value": 0.4251,
+    "is_vague_address": 0.41437,
+    "num_items": 0.36008,
+    "city_rto_risk": 0.30576,
+    "utm_source_clean_direct": 0.30147,
+    "has_prior_rto": 0.27309,
+    "customer_prior_rto": 0.26972,
+    "utm_source_clean_meta_ads": 0.23786,
+    "state_clean_Assam": 0.22896,
+    "state_clean_Karnataka": 0.20877,
+    "is_suspicious_name": 0.19912,
+    "utm_source_clean_whatsapp_broadcast": 0.1783,
+    "customer_prior_orders": 0.17105,
+    "is_low_value": 0.1705,
+    "multiple_prior_rto": 0.1627,
+    "order_dayofweek": 0.15899,
+    "state_clean_Uttar Pradesh": 0.12895,
+    "address_length": 0.12715
+  },
+  "feature_list": {
+    "numeric": [
+      "order_value",
+      "num_items",
+      "avg_item_price",
+      "customer_prior_orders",
+      "customer_prior_rto",
+      "prior_rto_rate",
+      "address_length",
+      "address_word_count",
+      "name_word_count",
+      "name_length",
+      "city_rto_risk",
+      "pin_rto_risk",
+      "is_first_time",
+      "has_prior_rto",
+      "multiple_prior_rto",
+      "is_suspicious_name",
+      "is_vague_address",
+      "has_landmark",
+      "is_high_value",
+      "is_low_value",
+      "order_hour",
+      "order_dayofweek",
+      "is_night_order",
+      "is_weekend",
+      "missing_pincode"
+    ],
+    "categorical": [
+      "utm_source_clean",
+      "state_clean"
+    ],
+    "all_features": [
+      "order_value",
+      "num_items",
+      "avg_item_price",
+      "customer_prior_orders",
+      "customer_prior_rto",
+      "prior_rto_rate",
+      "address_length",
+      "address_word_count",
+      "name_word_count",
+      "name_length",
+      "city_rto_risk",
+      "pin_rto_risk",
+      "is_first_time",
+      "has_prior_rto",
+      "multiple_prior_rto",
+      "is_suspicious_name",
+      "is_vague_address",
+      "has_landmark",
+      "is_high_value",
+      "is_low_value",
+      "order_hour",
+      "order_dayofweek",
+      "is_night_order",
+      "is_weekend",
+      "missing_pincode",
+      "utm_source_clean",
+      "state_clean"
+    ]
+  }
+}
